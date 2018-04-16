@@ -1,0 +1,11 @@
+[root@ip-172-31-16-88 ec2-user]# cat /var/log/cron
+Apr 16 21:39:08 ip-172-31-16-88 crond[2586]: (CRON) STARTUP (1.4.4)
+Apr 16 21:39:08 ip-172-31-16-88 crond[2586]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 80% if used.)
+Apr 16 21:39:08 ip-172-31-16-88 crond[2586]: (CRON) INFO (running with inotify support)
+Apr 16 21:39:16 ip-172-31-16-88 crontab[2657]: (root) LIST (root)
+Apr 16 21:39:16 ip-172-31-16-88 crontab[2656]: (root) REPLACE (root)
+Apr 16 21:39:57 ip-172-31-16-88 crontab[2748]: (root) LIST (root)
+Apr 16 21:40:01 ip-172-31-16-88 CROND[2752]: (root) CMD (/CloudWatch/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-path=/ --disk-space-util --disk-space-used --disk-space-avail)
+Apr 16 21:41:01 ip-172-31-16-88 CROND[2762]: (root) CMD (/CloudWatch/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-path=/ --disk-space-util --disk-space-used --disk-space-avail)
+Apr 16 21:42:01 ip-172-31-16-88 CROND[2770]: (root) CMD (/CloudWatch/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-path=/ --disk-space-util --disk-space-used --disk-space-avail)
+Apr 16 21:43:01 ip-172-31-16-88 CROND[2778]: (root) CMD (/CloudWatch/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-path=/ --disk-space-util --disk-space-used --disk-space-avail)

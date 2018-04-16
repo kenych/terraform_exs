@@ -16,3 +16,6 @@ aws ec2 describe-availability-zones --region eu-west-2 | jq -r  '.AvailabilityZo
 #eu-west-2c
 
 aws s3api create-bucket --bucket kayan-terra-state --region eu-west-2 --create-bucket-configuration LocationConstraint=eu-west-2
+
+#stats of resources:
+grep -r -i --include=\*.tf resource ./ | awk {'print $2'}| sort | uniq
