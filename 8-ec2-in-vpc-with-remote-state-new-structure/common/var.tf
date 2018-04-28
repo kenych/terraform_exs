@@ -5,4 +5,3 @@ variable "region" {
 variable "tag-name" {
   default = "terraform-exs"
 }
-

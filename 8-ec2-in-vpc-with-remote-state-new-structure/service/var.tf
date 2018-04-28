@@ -5,5 +5,3 @@ variable "env" {
 variable "service" {
   default = "app-servers"
 }
-
-
