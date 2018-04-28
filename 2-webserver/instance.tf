@@ -51,7 +51,7 @@ resource "aws_security_group" "web_app_sg" {
     to_port = "${var.web_server_port}"
     protocol = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"]
+      "${data.aws_ip_ranges.eu-west_regiions_ec2.cidr_blocks}"]
   }
   ingress {
     from_port = 22
