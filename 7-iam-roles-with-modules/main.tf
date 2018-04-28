@@ -14,7 +14,7 @@ resource "aws_instance" "centos" {
     Name = "helloTerraformCloudWatch"
   }
 
-  iam_instance_profile = "iam_instance_profile_m_ec2_with_cloud_watch_access"
+  iam_instance_profile = "iam_instance_profile_m_${var.role_purpose}"
 
   key_name = "terra"
 
