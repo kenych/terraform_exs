@@ -8,4 +8,4 @@ unzip CloudWatchMonitoringScripts-1.2.1.zip
 rm -rf CloudWatchMonitoringScripts-1.2.1.zip
 cd aws-scripts-mon
 ./mon-put-instance-data.pl --mem-util --verify --verbose > CloudWatchtest.log
-(crontab -l 2>/dev/null; echo "* * * * * /CloudWatch/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-path=/ --disk-space-util --disk-space-used --disk-space-avail") | crontab -
+(crontab -l 2>/dev/null; echo "${CRON} /CloudWatch/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-used --mem-avail --disk-space-util --disk-path=/ --disk-space-util --disk-space-used --disk-space-avail") | crontab -

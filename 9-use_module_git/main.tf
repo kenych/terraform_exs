@@ -15,11 +15,12 @@ resource "aws_instance" "centos" {
     Name = "helloTerraformCloudWatch"
   }
 
-  iam_instance_profile = "iam_instance_profilegst_m_${var.role_purpose}"
+  iam_instance_profile = "iam_instance_profile_m_${var.role_purpose}"
 
   key_name = "terra"
 
-  user_data = "${file("init.sh")}"
+//  user_data = "${file("init.sh")}"
+  user_data = "${data.template_file.cloud_watch_custom_metric.rendered}"
 
   provisioner "local-exec" {
     command = "echo Public IP:     ${self.public_ip}"
