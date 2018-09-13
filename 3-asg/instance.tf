@@ -144,7 +144,9 @@ resource "aws_elb" "webappelb" {
     "${data.aws_availability_zones.all.names}",
   ]
 
-  security_groups = ["${aws_security_group.web_app_elb_sg.id}"]
+//  bug, when it is emptpy, it is always appears in the plan
+//  security_groups = ["${aws_security_group.web_app_elb_sg.id}","${aws_security_group.web_app_elb_sg.id}"]
+  security_groups = ["${aws_security_group.web_app_elb_sg.id}",""]
 
   listener {
     lb_port           = 80
