@@ -19,7 +19,7 @@ resource "aws_instance" "centos" {
 
   key_name = "terra"
 
-//  user_data = "${file("init.sh")}"
+  //  user_data = "${file("init.sh")}"
   user_data = "${data.template_file.cloud_watch_custom_metric.rendered}"
 
   provisioner "local-exec" {

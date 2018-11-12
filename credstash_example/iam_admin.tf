@@ -65,7 +65,6 @@ resource "aws_iam_role_policy" "dynamodb_credstash_reader_admin" {
 EOF
 }
 
-
 resource "aws_iam_role_policy" "kms_encrypt" {
   name_prefix = "kms_encrypt-"
   role        = "${aws_iam_role.assume_role_admin.id}"

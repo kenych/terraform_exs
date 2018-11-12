@@ -28,4 +28,3 @@ resource "aws_dynamodb_table" "credential_store" {
 provider "aws" {
   region = "eu-west-1"
 }
-

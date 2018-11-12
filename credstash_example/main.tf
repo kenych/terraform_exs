@@ -1,8 +1,8 @@
 resource "aws_instance" "credstash_admin" {
-  ami = "${data.aws_ami.ubuntu_1604.id}"
+  ami           = "${data.aws_ami.ubuntu_1604.id}"
   instance_type = "t2.micro"
 
-  key_name = "terra"
+  key_name  = "terra"
   user_data = "${file("setup.sh")}"
 
   vpc_security_group_ids = [
@@ -17,10 +17,10 @@ resource "aws_instance" "credstash_admin" {
 }
 
 resource "aws_instance" "credstash_dev" {
-  ami = "${data.aws_ami.ubuntu_1604.id}"
+  ami           = "${data.aws_ami.ubuntu_1604.id}"
   instance_type = "t2.micro"
 
-  key_name = "terra"
+  key_name  = "terra"
   user_data = "${file("setup.sh")}"
 
   vpc_security_group_ids = [
@@ -35,10 +35,10 @@ resource "aws_instance" "credstash_dev" {
 }
 
 resource "aws_instance" "credstash_qa" {
-  ami = "${data.aws_ami.ubuntu_1604.id}"
+  ami           = "${data.aws_ami.ubuntu_1604.id}"
   instance_type = "t2.micro"
 
-  key_name = "terra"
+  key_name  = "terra"
   user_data = "${file("setup.sh")}"
 
   vpc_security_group_ids = [

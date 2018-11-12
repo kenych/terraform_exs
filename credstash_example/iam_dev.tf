@@ -70,4 +70,3 @@ resource "aws_iam_role_policy" "dynamodb_credstash_reader_dev" {
 }
 EOF
 }
-

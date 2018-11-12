@@ -1,10 +1,9 @@
-variable "eip"{
+variable "eip" {
   default = ""
 }
 
-variable "name"{
+variable "name" {
   default = ""
 }
 
-variable "internal"{
-}
+variable "internal" {}
