@@ -23,21 +23,25 @@ resource "aws_security_group_rule" "allow_egress" {
 }
 
 resource "aws_security_group_rule" "allow_ssh" {
-  type        = "ingress"
-  from_port   = 22
-  to_port     = 22
-  protocol    = "tcp"
-  cidr_blocks = ["${var.myip}/32"]
+  type      = "ingress"
+  from_port = 22
+  to_port   = 22
+  protocol  = "tcp"
+
+  //  cidr_blocks = ["${var.myip}/32"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = "${aws_security_group.kubernetes_sg.id}"
 }
 
 resource "aws_security_group_rule" "allow_api" {
-  type        = "ingress"
-  from_port   = 6443
-  to_port     = 6443
-  protocol    = "tcp"
-  cidr_blocks = ["${var.myip}/32"]
+  type      = "ingress"
+  from_port = 6443
+  to_port   = 6443
+  protocol  = "tcp"
+
+  //  cidr_blocks = ["${var.myip}/32"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = "${aws_security_group.kubernetes_sg.id}"
 }

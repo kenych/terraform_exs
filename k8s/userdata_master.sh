@@ -59,3 +59,6 @@ credstash -r eu-west-1 put discovery-token-ca-cert-hash  $(openssl x509 -pubkey 
 credstash -r eu-west-1 put token $(kubeadm token create) role=k8s-cluster -a
 credstash -r eu-west-1 put ip-address $(curl -s http://169.254.169.254/latest/meta-data/local-ipv4) role=k8s-cluster -a
 
+
+# if you deploy to master node, remove taint
+kubectl taint nodes --all node-role.kubernetes.io/master-

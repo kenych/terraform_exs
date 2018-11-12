@@ -16,6 +16,7 @@ resource "aws_instance" "master_node" {
 }
 
 resource "aws_instance" "slave_node1" {
+  count         = 0
   ami           = "${data.aws_ami.ubuntu_1604.id}"
   instance_type = "t2.micro"
   key_name      = "terra"
@@ -33,6 +34,7 @@ resource "aws_instance" "slave_node1" {
 }
 
 resource "aws_instance" "slave_node2" {
+  count         = 0
   ami           = "${data.aws_ami.ubuntu_1604.id}"
   instance_type = "t2.micro"
   key_name      = "terra"
