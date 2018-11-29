@@ -22,5 +22,3 @@ module "etcd-c" {
   sg_id                = "${aws_security_group.etcd.id}"
 }
 
-
-# TODO add ebs ! :))

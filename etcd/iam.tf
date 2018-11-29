@@ -45,3 +45,24 @@ resource "aws_iam_role_policy" "paramstore" {
 }
 EOF
 }
+
+resource "aws_iam_role_policy" "ebs" {
+  name_prefix = "ebs-"
+  role        = "${aws_iam_role.assume_role.id}"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeVolumes",
+                "ec2:AttachVolume"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}

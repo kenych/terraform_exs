@@ -1,11 +1,41 @@
 #!/bin/bash
 
-sleep 100
+set -euxo pipefail
+
+sleep 30
+
+AVAILABILITY_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | cut -b 10)
+
+apt-get update
+apt-get -y install wget python-pip
+pip install --no-cache-dir awscli
+
+VOLUME_ID=$(aws ec2 describe-volumes --filters "Name=status,Values=available"  Name=tag:Name,Values=ebs_etcd_$AVAILABILITY_ZONE --query "Volumes[].VolumeId" --output text --region eu-west-2)
+
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+
+aws ec2 attach-volume --region eu-west-2 \
+              --volume-id "${VOLUME_ID}" \
+              --instance-id "${INSTANCE_ID}" \
+              --device "/dev/xvdf"
+
+while [ -z $(aws ec2 describe-volumes --filters "Name=status,Values=in-use"  Name=tag:Name,Values=ebs_etcd_$AVAILABILITY_ZONE --query "Volumes[].VolumeId" --output text --region eu-west-2) ] ; do sleep 10; echo "ebs not ready"; done
+
+sleep 5
+
+if [[ -z $(blkid /dev/xvdf) ]]; then
+  mkfs -t ext4 /dev/xvdf  
+fi
+
+mkdir -p /opt/etcd
+mount /dev/xvdf /opt/etcd
+
 
 ETCD_VERSION="v3.3.8"
+# ETCD_VERSION="v3.3.10"
 ETCD_URL="https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz"
 ETCD_CONFIG=/etc/etcd
-AVAILABILITY_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | cut -b 10)
+
 
 apt-get update
 apt-get -y install wget python-pip
