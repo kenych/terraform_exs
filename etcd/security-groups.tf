@@ -8,9 +8,9 @@ resource "aws_security_group_rule" "all-internal" {
   type              = "ingress"
   security_group_id = "${aws_security_group.etcd.id}"
   self              = true
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
+  from_port         = 2379
+  to_port           = 2380
+  protocol          = "tcp"
 }
 
 resource "aws_security_group_rule" "allow_egress" {
@@ -27,18 +27,7 @@ resource "aws_security_group_rule" "allow_ssh" {
   from_port   = 22
   to_port     = 22
   protocol    = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-
-  security_group_id = "${aws_security_group.etcd.id}"
-}
-
-resource "aws_security_group_rule" "allow_etcd" {
-  type        = "ingress"
-  from_port   = 2379
-
-  to_port     = 2380
-  protocol    = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = "${aws_security_group.etcd.id}"
 }

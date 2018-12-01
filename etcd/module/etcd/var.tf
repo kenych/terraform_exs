@@ -5,3 +5,4 @@ variable "zone_suffix" {}
 variable "iam_instance_profile" {}
 
 variable "sg_id" {}
+variable "zone_id" {}

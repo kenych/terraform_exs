@@ -4,6 +4,7 @@ module "etcd-a" {
   zone_suffix          = "a"
   iam_instance_profile = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
   sg_id                = "${aws_security_group.etcd.id}"
+  zone_id              = "${aws_route53_zone.k8s_private_zone.zone_id}"
 }
 
 module "etcd-b" {
@@ -12,6 +13,7 @@ module "etcd-b" {
   zone_suffix          = "b"
   iam_instance_profile = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
   sg_id                = "${aws_security_group.etcd.id}"
+  zone_id              = "${aws_route53_zone.k8s_private_zone.zone_id}"
 }
 
 module "etcd-c" {
@@ -20,5 +22,13 @@ module "etcd-c" {
   zone_suffix          = "c"
   iam_instance_profile = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
   sg_id                = "${aws_security_group.etcd.id}"
+  zone_id              = "${aws_route53_zone.k8s_private_zone.zone_id}"
 }
 
+resource "aws_route53_zone" "k8s_private_zone" {
+  name = "k8s.ifritltd.co.uk"
+
+  vpc {
+    vpc_id = "${data.aws_vpc.default.id}"
+  }
+}
