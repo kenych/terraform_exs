@@ -8,6 +8,8 @@ AVAILABILITY_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/av
 
 apt-get update
 apt-get -y install wget python-pip
+
+locale-gen en_GB.UTF-8
 pip install --no-cache-dir awscli
 
 VOLUME_ID=$(aws ec2 describe-volumes --filters "Name=status,Values=available"  Name=tag:Name,Values=ebs_etcd_$AVAILABILITY_ZONE --query "Volumes[].VolumeId" --output text --region eu-west-2)
