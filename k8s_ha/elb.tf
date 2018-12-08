@@ -4,11 +4,9 @@ resource "aws_elb" "api_load_balancer" {
   #   subnets  = ["${var.subnets}"]
   internal = true
 
-  subnets = ["subnet-4e89bb03", "subnet-52ce2228","subnet-892a81e0" ]
-#   subnets = ["subnet-4e89bb03", "subnet-52ce2228","subnet-892a81e0", ]
+  subnets = ["subnet-4e89bb03", "subnet-52ce2228", "subnet-892a81e0" ]
 
-#   instances = ["${aws_instance.master_node1.id}", "${aws_instance.master_node2.id}", "${aws_instance.master_node3.id}"]
-  instances = ["${aws_instance.master_node1.id}", "${aws_instance.master_node2.id}"]
+  instances = ["${aws_instance.master_node1.id}", "${aws_instance.master_node2.id}", "${aws_instance.master_node3.id}"]
 
   listener {
     instance_port     = "${var.listener_port}"

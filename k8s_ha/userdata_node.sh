@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# DOCKER SETUP
+set -euxo pipefail
 
 # install docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -34,26 +34,27 @@ deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
 apt-get update
-apt-get install -y kubelet kubeadm kubectl
+apt-get install -y kubelet kubeadm kubectl python-pip
 apt-mark hold kubelet kubeadm kubectl
+
+locale-gen en_GB.UTF-8
+pip install --no-cache-dir awscli
 
 systemctl daemon-reload
 systemctl restart kubelet
 
-# install credstash
-sudo locale-gen en_GB.UTF-8
-apt install -y python-pip
-pip install credstash
-
+#slave node
 
 # wait for master node
-while [ ! $(credstash -r eu-west-1 get ip-address role=k8s-cluster 2> /dev/null) ];do echo waiting for master; sleep 5;done
+while [ "None" = "$(aws ssm get-parameters --names 'k8s-init-token' --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)" ];do echo "waiting for init master"; sleep 5;done
+ 
+TOKEN=$(aws ssm get-parameters --names "k8s-init-token" --query '[Parameters[0].Value]' --output text --with-decryption  --region eu-west-2)
+TOKEN_HASH=$(aws ssm get-parameters --names "k8s-init-token-hash" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)
 
-# retrieve master node invitation details
-TOKEN=$(credstash -r eu-west-1 get token  role=k8s-cluster)
-DISCOVERY_TOKEN_CA_CERT_HASH=$(credstash -r eu-west-1 get discovery-token-ca-cert-hash role=k8s-cluster)
-IP_ADDRESS=$(credstash -r eu-west-1 get ip-address role=k8s-cluster)
+kubeadm join kubernetes.k8s.ifritltd.co.uk:6443 --token $TOKEN --discovery-token-ca-cert-hash sha256:$TOKEN_HASH 
 
-# join the cluster finally
-kubeadm join ${IP_ADDRESS}:6443 --token ${TOKEN} --discovery-token-ca-cert-hash sha256:${DISCOVERY_TOKEN_CA_CERT_HASH}
+# configure kubeconfig for kubectl
+mkdir -p /root/.kube
+cp -i /etc/kubernetes/admin.conf /root/.kube/config
+chown $(id -u):$(id -g) /root/.kube/config
 

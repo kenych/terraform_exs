@@ -45,12 +45,9 @@ systemctl restart kubelet
 
 mkdir -p /etc/kubernetes/pki/etcd
 
-aws ssm delete-parameter --name "k8s-init-token"  --region eu-west-2 2>/dev/null || true
-
 aws ssm get-parameters --names "etcd-ca" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2 > /etc/kubernetes/pki/etcd/ca.crt
 aws ssm get-parameters --names "etcd-server" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2 > /etc/kubernetes/pki/apiserver-etcd-client.crt
 aws ssm get-parameters --names "etcd-server-key" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2 > /etc/kubernetes/pki/apiserver-etcd-client.key
-
 
 # for initial master
 cat > kubeadm-config.yaml <<EOF
@@ -70,19 +67,21 @@ etcd:
         certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
         keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 networking:
-    podSubnet: "10.244.0.0/16"
+    podSubnet: "192.168.0.0/16"
 EOF
 
-kubeadm init --config kubeadm-config.yaml
+# TODO nodeName --node-name https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
+
+kubeadm init --config kubeadm-config.yaml --ignore-preflight-errors=all
 
 # configure kubeconfig for kubectl
 mkdir -p /root/.kube
 cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
-# install flannel
-kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
-
+# install calico
+kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 
 sleep 5
 # initial master
@@ -95,3 +94,6 @@ aws ssm put-parameter --name "k8s-front-proxy-ca-key" --value "$(cat /etc/kubern
 
 sleep 5
 aws ssm put-parameter --name "k8s-init-token" --value "$(kubeadm token create)"  --type "SecureString" --region eu-west-2 --overwrite 
+aws ssm put-parameter --name "k8s-init-token-hash" --value "$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //')"  --type "SecureString" --region eu-west-2 --overwrite 
+
+ 
