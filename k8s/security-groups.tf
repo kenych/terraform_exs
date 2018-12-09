@@ -4,7 +4,7 @@ resource "aws_security_group" "kubernetes_sg" {
   vpc_id      = "${data.aws_vpc.default.id}"
 }
 
-resource "aws_security_group_rule" "all-master-to-master" {
+resource "aws_security_group_rule" "all-k8s-internal" {
   type              = "ingress"
   security_group_id = "${aws_security_group.kubernetes_sg.id}"
   self              = true
@@ -27,21 +27,8 @@ resource "aws_security_group_rule" "allow_ssh" {
   from_port   = 22
   to_port     = 22
   protocol    = "tcp"
-  cidr_blocks = ["${var.myip}/32"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = "${aws_security_group.kubernetes_sg.id}"
 }
 
-resource "aws_security_group_rule" "allow_api" {
-  type        = "ingress"
-  from_port   = 6443
-  to_port     = 6443
-  protocol    = "tcp"
-  cidr_blocks = ["${var.myip}/32"]
-
-  security_group_id = "${aws_security_group.kubernetes_sg.id}"
-}
-
-variable "myip" {
-  default = "92.4.52.251"
-}

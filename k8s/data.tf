@@ -11,12 +11,3 @@ data "aws_vpc" "default" {
   }
 }
 
-data "terraform_remote_state" "credstash" {
-  backend = "s3"
-
-  config {
-    bucket = "kayan-terra-state"
-    region = "eu-west-2"
-    key    = "credstash.tfstate"
-  }
-}

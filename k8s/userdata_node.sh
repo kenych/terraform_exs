@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euxo pipefail
+
 # DOCKER SETUP
 
 # install docker
@@ -40,19 +42,18 @@ apt-mark hold kubelet kubeadm kubectl
 systemctl daemon-reload
 systemctl restart kubelet
 
-# install credstash
-sudo locale-gen en_GB.UTF-8
+# install awscli
+locale-gen en_GB.UTF-8
 apt install -y python-pip
-pip install credstash
-
+pip install --no-cache-dir awscli
 
 # wait for master node
-while [ ! $(credstash -r eu-west-1 get ip-address role=k8s-cluster 2> /dev/null) ];do echo waiting for master; sleep 5;done
+while [ "None" = "$(aws ssm get-parameters --names 'stack-k8s-ip-address' --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)" ];do echo "waiting for master"; sleep 5;done
 
 # retrieve master node invitation details
-TOKEN=$(credstash -r eu-west-1 get token  role=k8s-cluster)
-DISCOVERY_TOKEN_CA_CERT_HASH=$(credstash -r eu-west-1 get discovery-token-ca-cert-hash role=k8s-cluster)
-IP_ADDRESS=$(credstash -r eu-west-1 get ip-address role=k8s-cluster)
+TOKEN=$(aws ssm get-parameters --names "stack-k8s-init-token" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)
+DISCOVERY_TOKEN_CA_CERT_HASH=$(aws ssm get-parameters --names "stack-k8s-init-token-hash" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)
+IP_ADDRESS=$(aws ssm get-parameters --names "stack-k8s-ip-address" --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)
 
 # join the cluster finally
 kubeadm join ${IP_ADDRESS}:6443 --token ${TOKEN} --discovery-token-ca-cert-hash sha256:${DISCOVERY_TOKEN_CA_CERT_HASH}
