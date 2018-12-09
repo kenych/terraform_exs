@@ -33,8 +33,9 @@ cat >/etc/apt/sources.list.d/kubernetes.list <<EOF
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
+K8S_VERSION=1.13.0-00
 apt-get update
-apt-get install -y kubelet kubeadm kubectl python-pip
+apt-get install -y kubelet=${K8S_VERSION} kubeadm:amd64=${K8S_VERSION} kubectl:amd64=${K8S_VERSION} python-pip
 apt-mark hold kubelet kubeadm kubectl
 
 locale-gen en_GB.UTF-8

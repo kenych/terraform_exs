@@ -33,8 +33,10 @@ cat >/etc/apt/sources.list.d/kubernetes.list <<EOF
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
+# all list https://packages.cloud.google.com/apt/dists/kubernetes-xenial/main/binary-amd64/Packages
+K8S_VERSION=1.12.3-00
 apt-get update
-apt-get install -y kubelet kubeadm kubectl python-pip
+apt-get install -y kubelet=${K8S_VERSION} kubeadm:amd64=${K8S_VERSION} kubectl:amd64=${K8S_VERSION} python-pip
 apt-mark hold kubelet kubeadm kubectl
 
 locale-gen en_GB.UTF-8
@@ -69,8 +71,6 @@ etcd:
 networking:
     podSubnet: "192.168.0.0/16"
 EOF
-
-# TODO nodeName --node-name https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/
 
 kubeadm init --config kubeadm-config.yaml --ignore-preflight-errors=all
 
