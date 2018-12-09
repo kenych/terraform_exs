@@ -36,16 +36,13 @@ deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
 apt-get update
-apt-get install -y kubelet kubeadm kubectl
+apt-get install -y kubelet kubeadm kubectl python-pip
+locale-gen en_GB.UTF-8
+pip install --no-cache-dir awscli
 apt-mark hold kubelet kubeadm kubectl
 
 systemctl daemon-reload
 systemctl restart kubelet
-
-# install awscli
-locale-gen en_GB.UTF-8
-apt install -y python-pip
-pip install --no-cache-dir awscli
 
 # wait for master node
 while [ "None" = "$(aws ssm get-parameters --names 'stack-k8s-ip-address' --query '[Parameters[0].Value]' --output text  --with-decryption --region eu-west-2)" ];do echo "waiting for master"; sleep 5;done

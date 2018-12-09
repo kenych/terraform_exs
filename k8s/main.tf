@@ -15,19 +15,19 @@ resource "aws_instance" "master_node" {
   }
 }
 
-resource "aws_instance" "slave_node1" {
-  ami           = "${data.aws_ami.ubuntu_1604.id}"
-  instance_type = "t2.micro"
-  key_name      = "terra"
-  user_data     = "${file("userdata_node.sh")}"
+# resource "aws_instance" "slave_node1" {
+#   ami           = "${data.aws_ami.ubuntu_1604.id}"
+#   instance_type = "t2.micro"
+#   key_name      = "terra"
+#   user_data     = "${file("userdata_node.sh")}"
 
-  vpc_security_group_ids = [
-    "${aws_security_group.kubernetes_sg.id}",
-  ]
+#   vpc_security_group_ids = [
+#     "${aws_security_group.kubernetes_sg.id}",
+#   ]
 
-  iam_instance_profile = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
+#   iam_instance_profile = "${aws_iam_instance_profile.aws_iam_instance_profile.name}"
 
-  tags {
-    Name = "example k8s node1"
-  }
-}
+#   tags {
+#     Name = "example k8s node1"
+#   }
+# }
