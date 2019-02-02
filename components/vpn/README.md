@@ -39,6 +39,21 @@ easyrsa gen-req client nopass
 
 easyrsa sign-req client client
 
+# add as many as you want:
+# easyrsa gen-req client1 nopass
+# easyrsa sign-req client client1
+
+# easyrsa gen-req client2 nopass
+# easyrsa sign-req client client2
+# ..
+# .....
+# easyrsa gen-req clientN nopass
+# easyrsa sign-req client clientN
+
+# or with pass (then same will be used when connecting on client side):
+# easyrsa gen-req clientN
+# easyrsa sign-req client clientN
+
 cd /etc/openvpn/
 openvpn --genkey --secret pfs.key
 ```
@@ -159,3 +174,25 @@ journalctl -eu openvpn@client
 ```
 ip r add 10.0.1.20 dev tun0
 ```
+
+### on MacOS:
+
+All same apart public IP of VPN:
+
+```
+grep remote     /Users/$USER/Library/Application\ Support/Tunnelblick/Configurations/config.tblk/Contents/Resources/config.ovpn
+remote 18.130.154.13 1194
+```
+
+and routing:
+
+```
+sudo route -n add -net 10.0.1.0/24 10.8.0.2
+```
+
+Test
+```
+netstat -rn | grep '10.0.1/24'
+10.0.1/24          10.8.0.2           UGSc            0        0   utun3
+```
+
