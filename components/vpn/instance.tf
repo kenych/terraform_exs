@@ -9,7 +9,7 @@ data "terraform_remote_state" "subnets" {
     bucket = "kayan-terra-state"
 
     region = "${var.region}"
-    key    = "component-network.tfstate"
+    key    = "component-vpn-network.tfstate"
   }
 }
 
