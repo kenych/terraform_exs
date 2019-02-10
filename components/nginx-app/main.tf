@@ -60,6 +60,7 @@ module "nlb" {
   lb_port   = 80
   vpc_id    = "${data.terraform_remote_state.subnets.vpc_id}"
   asg_id    = "${module.asg.asg_id}"
+  asg_attach = true
 }
 
 resource "aws_security_group" "web-instance-security-group" {

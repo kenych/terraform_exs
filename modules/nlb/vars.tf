@@ -1,4 +1,5 @@
 variable "component" {}
+variable "name" {}
 
 variable "subnets" {
   type = "list"
@@ -16,4 +17,18 @@ variable "lb_protocol" {
 
 variable "vpc_id" {}
 
-variable "asg_id" {}
+variable "asg_id" {
+  default = ""
+}
+
+variable "instance_id" {
+  default = ""
+}
+
+variable "instance_attach" {
+  default = false
+}
+variable "asg_attach" {
+  default = false
+}
+
