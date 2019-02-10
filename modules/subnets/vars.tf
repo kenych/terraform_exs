@@ -10,4 +10,11 @@ variable "availability_zones" {
   type = "list"
 }
 
-variable "gateway_id" {}
+variable "gateway_id" {
+  default = ""
+}
+
+variable "is_public" {
+  default = true
+  
+}

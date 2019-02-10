@@ -16,5 +16,5 @@ variable "availability_zones" {
 
 
 variable "component" {
-  default = "vpn-network"
+  default = "network-test-peering"
 }

@@ -4,13 +4,21 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-module "buckets" {
-  source      = "../../../modules/buckets"
-  region      = "${var.region}"
-  versioning  = "true"
-  bucket_name = "terraform-${data.aws_caller_identity.current.account_id}-${var.region}"
-}
+# module "buckets" {
+#   source      = "../../modules/buckets"
+#   region      = "${var.region}"
+#   versioning  = "true"
+#   bucket_name = "terraform-${data.aws_caller_identity.current.account_id}-${var.region}"
+# }
+
+# module "buckets1" {
+#   source      = "../../modules/buckets"
+#   region      = "${var.region}"
+#   versioning  = "true"
+#   bucket_name = "testing-gw"
+#   acl         = "public-read"
+# }
 
 variable "region" {
-  default = "us-east-1"
+  default = "eu-west-2"
 }

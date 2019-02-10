@@ -25,7 +25,7 @@ resource "aws_route_table" "route_table" {
 }
 
 resource "aws_route" "public_route" {
-  count                  = "${length(var.availability_zones)}"
+  count                  = "${var.is_public ? length(var.availability_zones) : 0}"
   route_table_id         = "${element(aws_route_table.route_table.*.id, count.index)}"
   gateway_id             = "${var.gateway_id}"
   destination_cidr_block = "0.0.0.0/0"
