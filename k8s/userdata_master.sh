@@ -52,11 +52,13 @@ cp -i /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
 # install flannel
-kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
-sleep 5
-aws ssm put-parameter --name "stack-k8s-init-token" --value "$(kubeadm token create)"  --type "SecureString" --region eu-west-2 --overwrite 
-aws ssm put-parameter --name "stack-k8s-init-token-hash" --value "$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //')"  --type "SecureString" --region eu-west-2 --overwrite 
-aws ssm put-parameter --name "stack-k8s-ip-address" --value "$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)" --type "SecureString" --region eu-west-2 --overwrite 
+# uncomment for enable slave nodes:
+# sleep 5
+# aws ssm put-parameter --name "stack-k8s-init-token" --value "$(kubeadm token create)"  --type "SecureString" --region eu-west-2 --overwrite 
+# aws ssm put-parameter --name "stack-k8s-init-token-hash" --value "$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //')"  --type "SecureString" --region eu-west-2 --overwrite 
+# aws ssm put-parameter --name "stack-k8s-ip-address" --value "$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)" --type "SecureString" --region eu-west-2 --overwrite 
 
+# comment for scheduling to slave instead of master
 kubectl --kubeconfig=/etc/kubernetes/admin.conf taint nodes --all node-role.kubernetes.io/master-
