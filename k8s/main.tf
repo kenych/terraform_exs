@@ -13,6 +13,10 @@ resource "aws_instance" "master_node" {
   tags {
     Name = "example k8s master"
   }
+
+  root_block_device {
+    encrypted = true
+  }
 }
 
 provider "aws" {
